@@ -25,6 +25,8 @@ const summarizeDiff = async (diff) => {
   return res.data[0]?.summary_text || 'No significant changes.';
 };
 
+// this is the test commit
+
 const bumpVersion = (current = '0.0.0') => {
   const [maj, min, patch] = current.split('.').map(Number);
   return `${maj}.${min}.${patch + 1}`;
