@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const git = simpleGit();
-const model = "mrm8488/t5-base-finetuned-summarize-news"; // lightest
+const model = "Salesforce/codet5-small"; // lightest
 const HF_API_KEY = process.env.HUGGINGFACE_API_KEY;
 
 const getLastTag = async () => {
@@ -57,7 +57,7 @@ const getDiff = async () => {
 const summarizeDiff = async (diff) => {
   const res = await axios.post(
     `https://api-inference.huggingface.co/models/${model}`,
-    { inputs: `summarize: ${diff.slice(0, 2000)}` }, // truncating long diff
+    { inputs: `Generate a release note for this git diff: ${diff.slice(0, 2000)}` }, // truncating long diff
     { headers: { Authorization: `Bearer ${HF_API_KEY}` } }
   );
   console.log('Response:', res.data);

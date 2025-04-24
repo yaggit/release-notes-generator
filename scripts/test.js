@@ -15,4 +15,29 @@ const sequelize = new Sequelize(connectionString, {
   }
 });
 
-export default sequelize;
+import { Model, DataTypes } from 'sequelize';
+import sequelize from '../utils/db';
+
+class BlogPost extends Model {
+}
+
+BlogPost.init(
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+    },
+    content: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+  },
+  {
+    sequelize,
+    modelName: 'blogPost',
+  }
+);
+
+export default BlogPost;
+
