@@ -5,7 +5,9 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const git = simpleGit();
-const model = "openai-community/gpt2-large"; // Updated model
+// const model = "openai-community/gpt2-large"; // Updated model
+const model = "Salesforce/codet5-small"; // Updated model
+
 const HF_API_KEY = process.env.HUGGINGFACE_API_KEY;
 
 // First ensure we have proper git history
