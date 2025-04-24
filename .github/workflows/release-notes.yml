@@ -24,7 +24,7 @@ jobs:
       - name: Generate Release Notes
         env:
           HUGGINGFACE_API_KEY: ${{ secrets.HUGGINGFACE_API_KEY }}
-        run: node scripts/generateRelease.js
+        run: node scripts/app.js
 
       - name: Commit changes
         run: |
