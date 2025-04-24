@@ -1,6 +1,8 @@
 import axios from 'axios';
 import simpleGit from 'simple-git';
 import fs from 'fs';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const git = simpleGit();
 const model = "mrm8488/t5-base-finetuned-summarize-news"; // lightest
