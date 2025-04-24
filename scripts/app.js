@@ -11,7 +11,7 @@ const getLastTag = async () => {
   return tags.latest || 'HEAD~10'; // fallback to 10 commits ago
 };
 
-const getDiff = async () => {
+const getDiff = async () => { // get diff between last tag and HEAD
   const lastTag = await getLastTag();
   return git.diff([lastTag, 'HEAD']);
 };
