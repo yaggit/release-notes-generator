@@ -8,7 +8,7 @@ const HF_API_KEY = process.env.HUGGINGFACE_API_KEY;
 
 const getLastTag = async () => {
   const tags = await git.tags();
-  return tags.latest || 'HEAD~02'; // fallback to 10 commits ago
+  return tags.latest || 'HEAD~2';
 };
 
 const getDiff = async () => { // get diff between last tag and HEAD
