@@ -55,6 +55,15 @@ const getDiff = async () => {
 };
 
 const summarizeDiff = async (diff) => {
+  if (!diff) {
+    console.warn("No diff to summarize.");
+    return 'No changes detected.';
+  }
+  if (!HF_API_KEY) {
+    console.warn("Hugging Face API key not set. Skipping summarization.");
+    return 'No changes detected.';
+  }
+  console.log('Diff:', diff);
   const res = await axios.post(
     `https://api-inference.huggingface.co/models/${model}`,
     { inputs: `Generate a release note for this git diff: ${diff.slice(0, 2000)}` }, // truncating long diff
