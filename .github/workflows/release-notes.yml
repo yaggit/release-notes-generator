@@ -8,6 +8,7 @@ on:
 jobs:
   release-notes:
     runs-on: ubuntu-latest
+    environment: prod
 
     steps:
       - name: Checkout code
