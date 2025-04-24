@@ -35,6 +35,7 @@ const getLastTag = async () => {
 
 const getDiff = async () => {
   const lastRef = await getLastTag();
+  console.log("Last reference point:", lastRef);
   
   try {
     // If lastRef equals HEAD, there's nothing to diff against, return empty string
@@ -56,11 +57,11 @@ const getDiff = async () => {
 
 const summarizeDiff = async (diff) => {
   if (!diff) {
-    console.warn("No diff to summarize.");
+    console.log("No diff to summarize.");
     return 'No changes detected.';
   }
   if (!HF_API_KEY) {
-    console.warn("Hugging Face API key not set. Skipping summarization.");
+    console.log("Hugging Face API key not set. Skipping summarization.");
     return 'No changes detected.';
   }
   console.log('Diff:', diff);
