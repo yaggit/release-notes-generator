@@ -1,4 +1,8 @@
 
+## Version 0.0.8 - 2025-04-27
+
+Changes were made but could not be automatically summarized. Diff size: 424 characters.
+
 ## Version 0.0.7 - 2025-04-24
 
 //////////////////
