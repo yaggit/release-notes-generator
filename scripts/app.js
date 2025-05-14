@@ -5,10 +5,11 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const git = simpleGit();
-// const model = "openai-community/gpt2-large"; // Updated model
-const model = "microsoft/bitnet-b1.58-2B-4T"; // Updated model
+// const model = "openai-community/gpt2-large";` 
+const model = "microsoft/bitnet-b1.58-2B-4T"; 
 
 const HF_API_KEY = process.env.HUGGINGFACE_API_KEY;
+console.log("Hugging Face API Key =====:", HF_API_KEY);
 
 // First ensure we have proper git history
 const fetchHistory = async () => {
@@ -95,8 +96,19 @@ const summarizeDiff = async (diff) => {
     console.log("First 200 chars of diff:", diff.substring(0, 200));
     
     const res = await axios.post(
-      `https://api-inference.huggingface.co/models/${model}`,
-      { inputs: `Generate a release note for this git diff: ${diff.slice(0, 2000)}` },
+      `https://router.huggingface.co/hf-inference/models/microsoft/Phi-3-mini-4k-instruct/v1/chat/completions`,
+      // { inputs: `Generate a release note for this git diff: ${diff.slice(0, 2000)}` },
+      
+    {
+        "messages": [
+            {
+                "role": "user",
+                "content": "Generate a release note for this git diff: " + diff.slice(0, 2000)
+            }
+        ],
+        "model": "microsoft/Phi-3-mini-4k-instruct",
+        "stream": false
+    },
       { 
         headers: { 
           Authorization: `Bearer ${HF_API_KEY}`,
@@ -104,6 +116,17 @@ const summarizeDiff = async (diff) => {
         } 
       }
     );
+
+    // {
+    //     "messages": [
+    //         {
+    //             "role": "user",
+    //             "content": "Generate a release note for this git diff: " + diff.slice(0, 2000)
+    //         }
+    //     ],
+    //     "model": "microsoft/Phi-3-mini-4k-instruct",
+    //     "stream": false
+    // }
     
     console.log("API Response:", JSON.stringify(res.data, null, 2));
     
