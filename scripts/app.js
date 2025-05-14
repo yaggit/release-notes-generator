@@ -94,7 +94,7 @@ const summarizeDiff = async (diff) => {
     
     // Log a sample of what we're sending (for debugging)
     console.log("First 200 chars of diff:", diff.substring(0, 200));
-    
+      console.log("Diff ============", diff);
     const res = await axios.post(
       `https://router.huggingface.co/hf-inference/models/microsoft/Phi-3-mini-4k-instruct/v1/chat/completions`,
       // { inputs: `Generate a release note for this git diff: ${diff.slice(0, 2000)}` },
