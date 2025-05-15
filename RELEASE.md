@@ -1,4 +1,60 @@
 
+## Version 0.0.12 - 2025-05-15
+
+## Release Notes - Version 0.0.11
+
+### Date: 2025-05-14
+
+In this release, **version 0.0.2**, we've made significant changes to bring you the latest features and enhancements. Here's the rundown of the primary updates:
+
+### Major Changes
+- **Updated version 0.0.2**: We've revised the document, adding new information and making substantial modifications to ensure the usability and performance improvements of our product.
+- **Version 0.0.11**: A minor update to refine the document and clarify any outstanding points.
+
+### Application Updates (Continued)
+#### Version 0.0.1 (2025-05-14)
+- We've refactored the `app.js` script, incorporating new optimizations and enhancements for better user experience.
+- Modifications made include:
+  - The addition of robust logging statements to track the application's behavior and aid in debugging.
+  - Potential API endpoint changes to align with new functionalities.
+
+The detailed documentation for the updates is now contained within the diff files located in `/b/scripts/app.js`. This ensures that you can review the specific changes that have been made and implement them effectively in your environment.
+
+### Official Note
+
+To ensure a seamless experience with the latest release, please make sure to:
+- Run the necessary migrations. This may include database schema alterations, configuration updates, or API modifications.
+- Update your application environment to version 0.0.2.
+
+For more information about the features, see the updated [Release Notes](https://your.repository.url/RELEASE.md).
+
+Official Release Document (Limited Access)
+
+- [Download Release Notes](https://your.repository.url/RELEASE.md)
+- Documents may contain sensitive project information. Please handle with discretion.
+
+Download Release Documents (Include Version-specific Content)
+You can access the following release documents including version-specific content:
+- Version 0.0.11 (2025-05-14)
+- Version 0.0.2 (2025-05-14)
+
+For more detailed instructions and support, please contact our support team.
+
+Remember to adhere to best practices regarding the updates to ensure the stability and reliability of your application. Keep in mind that maintaining the compatibility of existing systems is essential.
+
+We appreciate your patience and understanding as we work to continually improve and optimize our product. Reliability comes from constant updates and the community feedback that helps us shape the future of our product.
+
+Explore the updates and enhancements we've added with version 0.0.2. Enjoy the newly incorporated features and bug fixes and let us know what you think!
+
+For any conflicts or disagreements about the update compatibility, we encourage an open discussion within our community to ensure the satisfactory execution of the new features.
+
+Thank you for being a part of our growing community!
+
+Note: Review the release notes for the specific changes and make a plan according to your production schedule. We recommend running a validation check before fully deploying to ensure the functionality works as intended.
+
+Update your systems and explore all details carefully to enhance your user experience with the latest version of our software. Don't forget to back up your current application setup before starting the update process; this will safeguard your work and prevent data loss in case of any unexpected issues.
+
+
 ## Version 0.0.11 - 2025-05-14
 
 # Release Notes - Version 0.0.2
