@@ -1,4 +1,54 @@
 
+## Version 0.0.13 - 2025-05-15
+
+### Release Notes – Version `1.2.0`
+
+#### Changes
+
+##### Git Over-The-Air (OTA) History Management
+- Removed and replaced Git pull method for removing unnesting history entry in OTA releases.
+  - Mike
+  - [disabled issue #19](https://github.com/huggingface/botbob-actions/issues/19) which warns against including `.git` in the git-lfs export.
+
+---
+
+- Fixed environment variable `process.env.HF_MODEL` to use `localModel`, fix for #27
+  - Mike
+  - [disabled issue #27](https://github.com/huggingface/botbob-actions/issues/27)
+
+#### Added / Updated
+
+##### Documentation & Logic
+- Added `fetchHistory` async function (#14)
+  - Eric
+
+##### Environment Setup
+- Hardcode `HUGGINGFACE_API_KEY` in `.env` (#15)
+  - Content Delivery Guy
+
+##### API Usage
+- Introduced usage of the `/v3/models/` endpoint instead of `/v3/text-generation/` after #31, and fixed the subsequent logic (#16)
+
+- Added Hugging Face model constant `model` (#9)
+
+##### Fixes
+- Fixed the export of `.gitignore` file in the gzip output (#40)
+
+- Fixed issue in triggering the release action when code is committed (#11)
+  - Mike
+  - [disabled issue #11](https://github.com/huggingface/botbob-actions/pull/11)
+
+##### Clean-ups
+- Commented-out GitHub API links (#1, 2, 3)
+- Removed pull method to remove `.git` entry in git-lfs export (#24)
+
+---
+
+#### Bug Fixes
+- Hotfix for `fetchHistory` breaking when there's no local history (#5)
+
+
+
 ## Version 0.0.12 - 2025-05-15
 
 ## Release Notes - Version 0.0.11
