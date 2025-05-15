@@ -1,4 +1,32 @@
 
+## Version 0.0.11 - 2025-05-14
+
+# Release Notes - Version 0.0.2
+
+## Date: 2025-05-14
+
+### Version 0.0.2
+This release brings some changes that have been implemented. However, a detailed summary could not be generated automatically. For a full overview, please check the diffs in/b/scripts/RELEASE.md. Diff size: 323 characters.
+
+### Version 0.0.1
+Similarly, changes have been made and summarized here. The release includes modifications that are present in/b/scripts/RELEASE.md. Diff size: 323 characters.
+
+---
+
+## Application Updates:
+
+### Version 0.0.1 (2025-05-14)
+- Changes have been made in the app.js script.
+- Modifications include the addition of logging statements and potential API endpoint changes.
+- The diff can be found in '/b/scripts/app.js'. Diff size: 94 characters.
+
+- - console.log("First 200 chars of diff:", diff.substring(0, 200)); -
++  console.log("Diff ============", diff);
+
+---
+
+Note: Please ensure you have the required updates in place to complement the changes mentioned in the release notes above. This might involve running specific migrations and updating your application environment according to the new versions.
+
 ## Version 0.0.10 - 2025-05-14
 
 # Release Note for version 0.0.9 Released on May 14, 2025
