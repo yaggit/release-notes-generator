@@ -117,30 +117,8 @@ const summarizeDiff = async (diff) => {
       }
     );
 
-    // {
-    //     "messages": [
-    //         {
-    //             "role": "user",
-    //             "content": "Generate a release note for this git diff: " + diff.slice(0, 2000)
-    //         }
-    //     ],
-    //     "model": "microsoft/Phi-3-mini-4k-instruct",
-    //     "stream": false
-    // }
     
     console.log("API Response:", JSON.stringify(res.data, null, 2));
-    
-    // Handle different possible response formats
-    // if (Array.isArray(res.data)) {
-    //   return res.data[0]?.generated_text || 'No significant changes detected.';
-    // } else if (typeof res.data === 'object' && res.data.generated_text) {
-    //   return res.data.generated_text;
-    // } else if (typeof res.data === 'string') {
-    //   return res.data;
-    // } else {
-    //   console.warn("Unexpected response format:", res.data);
-    //   return 'Changes detected but could not be summarized.';
-    // }
     return res.data.choices[0].message.content || 'No significant changes detected.';
   } catch (error) {
     console.error("Error in summarizeDiff:", error.message);
