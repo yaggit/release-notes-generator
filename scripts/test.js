@@ -1,43 +1,21 @@
-const connectionString = 'connection';
-console.log(connectionString)
+const axios = require('axios');
 
-if (!connectionString) {
-  throw new Error('SUPABASE_POSTGRES_URL is not defined in the environment variables');
-}
+// scripts/test.test.js
 
-const sequelize = new Sequelize(connectionString, {
-  dialect: 'postgres',
-  dialectOptions: {
-    ssl: {
-      require: true,
-      rejectUnauthorized: false
+describe('POST /server', () => {
+  it('should respond with 200 and return the posted data', async () => {
+    const postData = { name: 'John', age: 30 };
+    const response = await axios.post('http://localhost:3000/server', postData);
+
+    expect(response.status).toBe(200);
+    expect(response.data).toMatchObject(postData);
+  });
+
+  it('should return 400 for invalid data', async () => {
+    try {
+      await axios.post('http://localhost:3000/server', { invalid: true });
+    } catch (error) {
+      expect(error.response.status).toBe(400);
     }
-  }
+  });
 });
-
-import { Model, DataTypes } from 'sequelize';
-import sequelize from '../utils/db';
-
-class BlogPost extends Model {
-}
-
-BlogPost.init(
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
-    content: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-    },
-  },
-  {
-    sequelize,
-    modelName: 'blogPost',
-  }
-);
-
-export default BlogPost;
-

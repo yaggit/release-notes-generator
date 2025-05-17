@@ -15,11 +15,7 @@ A GitHub Action that automatically generates meaningful release notes from git c
 
 ### 1. Install the Package
 
-```bash
-npm install --save-dev auto-release-notes
-```
-
-Or clone this repository and copy the files to your project:
+Clone this repository and copy the files to your project:
 
 ```bash
 git clone https://github.com/yaggit/release-notes-generator.git
