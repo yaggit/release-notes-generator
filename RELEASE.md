@@ -1,4 +1,28 @@
 
+## Version 0.0.20 - 2025-05-17
+
+Release note based on the Git diff:
+
+- The `release-config.json` configuration structure was modified:
+  - Deleted the `CHANGELOG.md` option.
+  - Switched the default model from `microsoft/Phi-3-mini-4k-instruct` to `microsoft/Phi-3-mini-4k-instruct`.
+  - 'versioningStrategy' field now defaults to 'patch'.
+
+- The `readme.md` file was altered:
+  - Changed the default value for `releaseFile` from `RELEASE.md` to `CHANGELOG.md`.
+  - Corrected the typo for the `readme.md` file.
+
+- The `readme.md` document's behavior remains the same:
+  - Commit and push release notes after setup.
+  - Provides local usage instructions and a simple setup process for running the script.
+  - Outlines the use of a `release-config.json` file for customization of default settings.
+
+- The guide includes instruction on mitigating typical *Error: HUGGINGFACE_API_KEY* situations by referencing the GitHub repository or checking the local `.env` file.
+
+- Adjusted the troubleshooting section:
+  - Clarified that a manual entry in CHANGELOG is required for new repositories.
+  - Briefly mentioned API rate limits provided by Hugging Face, advising users to review their account details for any limits.
+
 ## Version 0.0.19 - 2025-05-17
 
 - Version 0.0.18 (2025-05-17)
