@@ -1,3 +1,7 @@
+## Version 0.0.16 - 2025-05-17
+
+Changes were made but could not be automatically summarized.
+
 ## Version 0.0.15 - 2025-05-17
 
 Changes were made but could not be automatically summarized.
