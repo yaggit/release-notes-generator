@@ -171,15 +171,16 @@ const summarizeDiff = async (diffData) => {
     );
 
     // Check if we got a valid response
-    if (!res.data || typeof res.data !== 'string' || res.data.trim().length === 0) {
-      console.error("Invalid API response:", JSON.stringify(res.data, null, 2));
-      return "Changes were made but could not be automatically summarized.";
-    }
+    // if (!res.data || typeof res.data !== 'string' || res.data.trim().length === 0) {
+    //   console.error("Invalid API response:", JSON.stringify(res.data, null, 2));
+    //   return "Changes were made but could not be automatically summarized.";
+    // }
 
     // Post-process the response to remove common issues
-    let summary = res.data.trim();
+    let summary = res.data.choices[0].message.content || res.data[0].generated_text;
+    summary = summary.replace(/(\r\n|\n|\r)/gm, " ");
     summary = summary.replace(/\bprobably\b|\blikely\b|\bpossibly\b|\bmight\b|\bcould have\b/gi, "");
-    
+    console.log("Response:", res);
     return summary || "No significant changes detected.";
   } catch (error) {
     console.error("Error in summarizeDiff:", error.message);
