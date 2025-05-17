@@ -2,25 +2,24 @@ import axios from "axios";
 import simpleGit from "simple-git";
 import fs from "fs";
 import dotenv from "dotenv";
+import path from "path";
 dotenv.config();
 
 const git = simpleGit();
-// const model = "openai-community/gpt2-large";`
-const model = "microsoft/bitnet-b1.58-2B-4T";
-
 const HF_API_KEY = process.env.HUGGINGFACE_API_KEY;
-console.log("Hugging Face API Key =====:", HF_API_KEY);
 
-// First ensure we have proper git history
+if (!HF_API_KEY) {
+  console.error("ERROR: HUGGINGFACE_API_KEY environment variable is not set");
+  process.exit(1);
+}
+
+// Ensure we have proper git history
 const fetchHistory = async () => {
   try {
     await git.fetch(["--unshallow"]);
     console.log("Repository unshallowed successfully");
   } catch (error) {
-    console.log(
-      "Repository might already have full history or other error:",
-      error.message
-    );
+    console.log("Repository might already have full history:", error.message);
   }
 };
 
@@ -29,13 +28,13 @@ const getLastTag = async () => {
     // Try to get the latest tag
     const tags = await git.tags();
 
-    if (tags.latest) {
+    if (tags.all && tags.all.length > 0) {
       console.log(`Using latest tag: ${tags.latest}`);
       return tags.latest;
     }
 
-    // If no tags, get commit count
-    const log = await git.log();
+    // If no tags, get last commit
+    const log = await git.log({ maxCount: 10 });
     const commitCount = log.total;
     console.log(`No tags found. Repository has ${commitCount} commits.`);
 
@@ -57,87 +56,149 @@ const getDiff = async () => {
     const lastRef = await getLastTag();
 
     if (!lastRef) {
-      return "Initial commit";
+      return { type: "initial", content: "Initial commit" };
     }
 
     console.log(`Getting diff between ${lastRef} and HEAD`);
+    
+    // Get the actual diff
     const diff = await git.diff([lastRef, "HEAD"]);
+    
+    // Also get the commit messages for context
+    const commits = await git.log({ from: lastRef, to: "HEAD" });
+    const commitMessages = commits.all.map(c => `- ${c.hash.substring(0, 7)}: ${c.message}`).join("\n");
+    
+    // Get the list of changed files
+    const changedFiles = await git.diff([lastRef, "HEAD", "--name-status"]);
+    
     console.log(`Diff size: ${diff.length} characters`);
+    console.log(`Found ${commits.total} commits between ${lastRef} and HEAD`);
 
     // Check if diff is too small/empty
     if (!diff || diff.trim().length === 0) {
-      const commits = await git.log({ from: lastRef, to: "HEAD" });
-      console.log(`Found ${commits.total} commits between ${lastRef} and HEAD`);
-
-      if (commits.total > 0) {
-        // Use commit messages as a fallback
-        const commitMessages = commits.all.map((c) => c.message).join("\n");
-        console.log("Using commit messages instead of diff");
-        return `Commit messages:\n${commitMessages}`;
-      }
+      console.log("Using commit messages instead of diff");
+      return { 
+        type: "commits", 
+        content: commitMessages,
+        files: changedFiles
+      };
     }
 
-    return diff;
+    return { 
+      type: "diff", 
+      content: diff,
+      commits: commitMessages,
+      files: changedFiles
+    };
   } catch (error) {
     console.error("Error in getDiff:", error);
-    return "Error getting diff";
+    return { type: "error", content: "Error getting diff" };
   }
 };
 
-const summarizeDiff = async (diff) => {
-  if (!diff || diff === "Initial commit" || diff === "Error getting diff") {
-    return diff;
+const constructPrompt = (diffData) => {
+  if (diffData.type === "initial") {
+    return "Initial commit - generate a release note for the first version of this project.";
+  }
+  
+  if (diffData.type === "error") {
+    return "Generate a release note for a maintenance update with no significant code changes.";
+  }
+  
+  if (diffData.type === "commits") {
+    return `Generate a detailed technical release note based on these commits:
+${diffData.content}
+
+Changed files:
+${diffData.files}
+
+Focus on concrete technical changes and improvements. Avoid vague language like "probably" or "likely". Be specific and direct about what changed.`;
+  }
+  
+  // For normal diffs
+  let prompt = `Generate a detailed technical release note from this git information:
+
+COMMITS:
+${diffData.commits}
+
+CHANGED FILES:
+${diffData.files}
+
+CODE CHANGES:
+${diffData.content.substring(0, 3500)}`;
+
+  prompt += `
+
+Requirements:
+1. Write in a professional, technical tone appropriate for developers
+2. Be specific and concrete about what changed - avoid vague qualifiers like "probably" or "likely"
+3. Format as bullet points grouped by change type (Features, Fixes, Improvements, etc.)
+4. Focus on the actual functionality changes, not the implementation details
+5. Be concise but comprehensive`;
+
+  return prompt;
+};
+
+const summarizeDiff = async (diffData) => {
+  if (diffData.type === "initial" || diffData.type === "error") {
+    return diffData.content;
   }
 
-  // Always try to summarize, even small diffs
   try {
     console.log("Sending data to Hugging Face API...");
-    console.log(`API Key available: ${Boolean(HF_API_KEY)}`);
-    console.log(`Sending ${diff.length} characters to the model`);
-
-    // Log a sample of what we're sending (for debugging)
-    console.log("First 200 chars of diff:", diff.substring(0, 200));
-    console.log("Diff ============", diff);
+    
+    const prompt = constructPrompt(diffData);
+    console.log("Prompt length:", prompt.length);
+    
     const res = await axios.post(
-      `https://router.huggingface.co/hf-inference/models/microsoft/Phi-3-mini-4k-instruct/v1/chat/completions`,
-
+      "https://api-inference.huggingface.co/models/microsoft/Phi-3-mini-4k-instruct",
       {
-        messages: [
-          {
-            role: "user",
-            content:
-              "Generate a release note for this git diff: " +
-              diff.slice(0, 2000),
-          },
-        ],
-        model: "microsoft/Phi-3-mini-4k-instruct",
-        stream: false,
+        inputs: prompt,
+        parameters: {
+          max_new_tokens: 1024,
+          temperature: 0.3, // Lower temperature for more focused responses
+          top_p: 0.9,
+          do_sample: true,
+          return_full_text: false
+        }
       },
       {
         headers: {
           Authorization: `Bearer ${HF_API_KEY}`,
-          "Content-Type": "application/json",
-        },
+          "Content-Type": "application/json"
+        }
       }
     );
 
-    console.log("API Response:", JSON.stringify(res.data, null, 2));
-    return (
-      res.data.choices[0].message.content || "No significant changes detected."
-    );
+    // Check if we got a valid response
+    if (!res.data || typeof res.data !== 'string' || res.data.trim().length === 0) {
+      console.error("Invalid API response:", JSON.stringify(res.data, null, 2));
+      return "Changes were made but could not be automatically summarized.";
+    }
+
+    // Post-process the response to remove common issues
+    let summary = res.data.trim();
+    summary = summary.replace(/\bprobably\b|\blikely\b|\bpossibly\b|\bmight\b|\bcould have\b/gi, "");
+    
+    return summary || "No significant changes detected.";
   } catch (error) {
     console.error("Error in summarizeDiff:", error.message);
     if (error.response) {
-      console.error("Response data:", error.response.data);
       console.error("Response status:", error.response.status);
+      console.error("Response data:", JSON.stringify(error.response.data, null, 2));
     }
-    return `Changes were made but could not be automatically summarized. Diff size: ${diff.length} characters.`;
+    return `Changes were made but could not be automatically summarized.`;
   }
 };
 
 const bumpVersion = (current = "0.0.0") => {
-  const [maj, min, patch] = current.split(".").map(Number);
-  return `${maj}.${min}.${patch + 1}`;
+  try {
+    const [maj, min, patch] = current.split(".").map(Number);
+    return `${maj}.${min}.${patch + 1}`;
+  } catch (error) {
+    console.error("Error in bumpVersion:", error);
+    return "0.0.1"; // Fallback to initial version
+  }
 };
 
 const updateReleaseNotes = async (summary) => {
@@ -145,40 +206,38 @@ const updateReleaseNotes = async (summary) => {
   let content = "";
   let version = "0.0.1";
 
-  if (fs.existsSync(filePath)) {
-    content = fs.readFileSync(filePath, "utf-8");
-    const versionMatch = content.match(/## Version (\d+\.\d+\.\d+)/);
-    if (versionMatch) version = bumpVersion(versionMatch[1]);
+  try {
+    if (fs.existsSync(filePath)) {
+      content = fs.readFileSync(filePath, "utf-8");
+      const versionMatch = content.match(/## Version (\d+\.\d+\.\d+)/);
+      if (versionMatch) version = bumpVersion(versionMatch[1]);
+    }
+
+    const date = new Date().toISOString().split("T")[0];
+    const newEntry = `## Version ${version} - ${date}\n\n${summary}\n\n`;
+
+    fs.writeFileSync(filePath, newEntry + content);
+    console.log(`Release notes updated to version ${version}`);
+  } catch (error) {
+    console.error("Error updating release notes file:", error);
+    process.exit(1);
   }
-
-  const date = new Date().toISOString().split("T")[0];
-  const newEntry = `\n## Version ${version} - ${date}\n\n${summary}\n`;
-
-  fs.writeFileSync(filePath, newEntry + content);
-  console.log("Release note updated.");
 };
 
 (async () => {
   try {
     console.log("Starting release notes generation...");
     await fetchHistory();
-    const diff = await getDiff();
+    const diffData = await getDiff();
 
-    if (diff && diff.trim() !== "") {
-      console.log("Got diff, now summarizing...");
-      const summary = await summarizeDiff(diff);
-      console.log("Summary:", summary);
-      await updateReleaseNotes(summary);
-    } else {
-      console.log("No changes detected to summarize");
-      await updateReleaseNotes(
-        "Maintenance update with no significant code changes."
-      );
-    }
-
+    console.log("Got diff data, now summarizing...");
+    const summary = await summarizeDiff(diffData);
+    console.log("Summary generated successfully");
+    
+    await updateReleaseNotes(summary);
     console.log("Process completed successfully.");
   } catch (error) {
-    console.error("Error in main process:", error);
+    console.error("Fatal error in main process:", error);
     process.exit(1);
   }
 })();
