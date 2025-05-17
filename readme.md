@@ -119,9 +119,9 @@ You can create a `release-config.json` file in your project root to customize be
 
 ```json
 {
-  "releaseFile": "CHANGELOG.md",  // Default: RELEASE.md
-  "model": "microsoft/Phi-3-mini-4k-instruct",  // Default model
-  "versioningStrategy": "patch"  // Can be "major", "minor", "patch"
+  "releaseFile": "RELEASE.md", /* File to write release notes */
+  "model": "microsoft/Phi-3-mini-4k-instruct",  /* Hugging Face model */
+  "versioningStrategy": "patch" /* Options: major, minor, patch */
 }
 ```
 
@@ -140,9 +140,6 @@ You can create a `release-config.json` file in your project root to customize be
 - **API rate limits**
   - Hugging Face has usage limits - check your account for details
 
-## License
-
-MIT
 
 ## Contributing
 
