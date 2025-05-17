@@ -1,4 +1,25 @@
 
+## Version 0.0.21 - 2025-05-17
+
+Release Notes:
+
+- Auto Release Notes AI GitHub Action now includes updated release notes.
+- Automatically generates detailed release notes on every push to the main branch
+- Improved parsing of git diffs to create concise, technical summaries using Hugging Face AI models
+- Now handles versioning automatically (upgrading version numbers on each release accordingly)
+- Enhanced comparison of changes between releases using refined git diff capabilities
+- New library import 'axios' included (for potential Data API interactions)
+- Unit tests have been expansively rewritten, now containing two new tests
+   - A test now makes sure that return codes from HTTP requests match specific numbers using Axios
+   - A test now checks for specific data structure in returned objects from HTTP requests
+- Note file now includes prompt for inclusion on main branch updates
+- Code files (dbConnection.js, test.js) were cleaned up, depreciated redundant logic removed or updated
+- Code style & commenting issues addressed.
+- Fixed no newline at end of file issues for readability
+- Skipped "Here be dragons" jokes
+- Setup instructions updated, now guideline for using npm & git commands
+- GitHub workflow updated for continuous deployment of new release notes
+
 ## Version 0.0.20 - 2025-05-17
 
 Release note based on the Git diff:
