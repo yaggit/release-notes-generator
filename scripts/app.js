@@ -79,12 +79,12 @@ const summarizeDiff = async (diff) => {
           {
             role: "system",
             content:
-              "You are a release note generator for developers. Be objective, concise, and technical. Do not speculate or use uncertain language. Your tone should be precise and factual. Do not use conversational or human-like phrases.",
+              "You are a technical changelog generator. Your job is to summarize Git diffs as factual, concise, and developer-friendly release notes. Use bullet points. Do not include headers, version numbers, or dates. Avoid any uncertain language or conversational tone.",
           },
           {
             role: "user",
             content:
-              "Summarize the following Git diff strictly as a changelog entry:\n\n" +
+              "Summarize the following Git diff as bullet points for a changelog. Only include technical changes that are clearly evident:\n\n" +
               diff.slice(0, 2000),
           },
         ],
