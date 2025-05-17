@@ -177,10 +177,10 @@ const summarizeDiff = async (diffData) => {
     // }
 
     // Post-process the response to remove common issues
+    console.log("Response:", res);
     let summary = res.data.choices[0].message.content || res.data[0].generated_text;
     summary = summary.replace(/(\r\n|\n|\r)/gm, " ");
     summary = summary.replace(/\bprobably\b|\blikely\b|\bpossibly\b|\bmight\b|\bcould have\b/gi, "");
-    console.log("Response:", res);
     return summary || "No significant changes detected.";
   } catch (error) {
     console.error("Error in summarizeDiff:", error.message);
