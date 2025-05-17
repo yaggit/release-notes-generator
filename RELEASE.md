@@ -1,4 +1,10 @@
 
+## Version 0.0.18 - 2025-05-17
+
+- Changes to 'scripts/app.js'
+
+- Added async function `summarizeDiff`
+
 ## Version 0.0.17 - 2025-05-17
 
 **Changelog**
