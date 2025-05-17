@@ -48,7 +48,8 @@ const getDiff = async () => {
     if (!lastRef) return "Initial commit";
 
     console.log(`🔍 Getting diff from ${lastRef} to HEAD...`);
-    const diff = await git.diff([lastRef, "HEAD"]);
+    // const diff = await git.diff([lastRef, "HEAD"]);
+    const diff = await git.diff(["--unified=20", lastRef, "HEAD"]);
     if (diff.trim()) return diff;
 
     const { all, total } = await git.log({ from: lastRef, to: "HEAD" });
@@ -79,13 +80,13 @@ const summarizeDiff = async (diff) => {
           {
             role: "system",
             content:
-              "You are a technical changelog generator. Your job is to summarize Git diffs as factual, concise, and developer-friendly release notes. Use bullet points. Do not include headers, version numbers, or dates. Avoid any uncertain language or conversational tone.",
+              "You are a changelog generator for a Git repository. You are given diffs with extra context. Your job is to analyze what code was added, removed, or changed — and describe it in concise, factual bullet points. Focus on function definitions, refactored logic, new constants, configuration changes, and key behavior modifications. Do not speculate. Avoid vague phrases. Assume the reader is a developer.",
           },
           {
             role: "user",
             content:
-              "Summarize the following Git diff as bullet points for a changelog. Only include technical changes that are clearly evident:\n\n" +
-              diff.slice(0, 2000),
+              "Here is a Git diff with 20 lines of context. Generate a release note that summarizes what was technically changed. Format the output as bullet points:\n\n" +
+              diff.slice(0, 8000),
           },
         ],
 
