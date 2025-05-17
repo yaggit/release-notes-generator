@@ -1,3 +1,16 @@
+
+## Version 0.0.17 - 2025-05-17
+
+**Changelog**
+
+## [VersionNumber]
+
+- `MODEL_NAME` is now defined as `"microsoft/Phi-3-mini-4k-instruct"`
+- Addition of `RELEASE_FILE` constant with value `RELEASE.md`
+- Updated error handling for fetching repository history to output a warning instead of an error
+- Replaced the backup strategy for no tags in repository
+- Improved commit count check to account for repositories with fewer than 2 commits
+- Updated log messages to provide better context for returned values
 ## Version 0.0.16 - 2025-05-17
 
 Changes were made but could not be automatically summarized.
