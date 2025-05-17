@@ -1,4 +1,23 @@
 
+## Version 0.0.19 - 2025-05-17
+
+- Version 0.0.18 (2025-05-17)
+  - Changes to 'scripts/app.js':
+    - Added async function `summarizeDiff`.
+
+- Version 0.0.17 (2025-05-17)
+  - Refactored:
+    - Changed constant `MODEL_NAME` to value `"microsoft/Phi-3-mini-4k-instruct"`.
+    - Added new constant `RELEASE_FILE` with value `RELEASE.md`.
+  - Updated error handling:
+    - Fetching repository history now warns when no tags are found, rather than throwing an error.
+
+- Version 0.0.16 (2025-05-17)
+  - The commit summary could not be provided automatically.
+
+- Version 0.0.15 (2025-05-17)
+  - The commit summary could not be provided automatically.
+
 ## Version 0.0.18 - 2025-05-17
 
 - Changes to 'scripts/app.js'
